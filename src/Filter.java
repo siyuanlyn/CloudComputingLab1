@@ -38,9 +38,9 @@ public class Filter {
 	
 	
 	public static void main(String[] args) throws IOException{
-		InputStream is = new FileInputStream("/home/siyuanlyn/Desktop/sample");
+		InputStream is = new FileInputStream("D:\\Dropbox\\pagecounts");
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		OutputStream os = new FileOutputStream("/home/siyuanlyn/Desktop/output.txt");
+		OutputStream os = new FileOutputStream("D:\\Dropbox\\output.txt");
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
 		while(true){
 			String line = br.readLine();
@@ -72,7 +72,10 @@ public class Filter {
 			}
 			//filter out the file with illegal extensions
 			for(i=0; i<ILLEGAL_EXTENSIONS.length; i++){
-				if(!ILLEGAL_EXTENSIONS[i].equalsIgnoreCase(s[1].substring(s[1].length()-4))){
+//				if(s[1].length() >=4 && !ILLEGAL_EXTENSIONS[i].equalsIgnoreCase(s[1].substring(s[1].length()-4))){
+//					continue;
+//				}
+				if(!(s[1].contains(ILLEGAL_EXTENSIONS[i]) || s[1].contains(ILLEGAL_EXTENSIONS[i].toLowerCase()))){
 					continue;
 				}
 				break;
