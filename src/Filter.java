@@ -63,7 +63,7 @@ public class Filter {
 				continue;
 			}
 			//entry should start with "en"
-			if(s[0].length() < 2 || !s[0].substring(0, 2).equals("en")){
+			if(s[0].length() != 2 || !s[0].substring(0, 2).equals("en")){
 				continue;
 			}
 			//filter illegal title out
