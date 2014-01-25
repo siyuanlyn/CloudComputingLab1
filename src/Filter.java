@@ -1,6 +1,16 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-
+class Entry{
+	String articleName;
+	int pageViews;
+	public Entry(String newArticleName, int newPageViews){
+		articleName = newArticleName;
+		pageViews = newPageViews;
+	}
+}
 public class Filter {
 	
 	final static String[] EXCLUDE_STRING = {
@@ -42,13 +52,13 @@ public class Filter {
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		OutputStream os = new FileOutputStream("D:\\Dropbox\\output.txt");
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
+		ArrayList<Entry> al = new ArrayList<Entry>();
 		while(true){
 			String line = br.readLine();
 			if(line == null){
 				break;
 			}
 			String[] s = line.split(" ");
-			
 			if(s.length < 4){
 				continue;
 			}
@@ -72,9 +82,6 @@ public class Filter {
 			}
 			//filter out the file with illegal extensions
 			for(i=0; i<ILLEGAL_EXTENSIONS.length; i++){
-//				if(s[1].length() >=4 && !ILLEGAL_EXTENSIONS[i].equalsIgnoreCase(s[1].substring(s[1].length()-4))){
-//					continue;
-//				}
 				if(!(s[1].contains(ILLEGAL_EXTENSIONS[i]) || s[1].contains(ILLEGAL_EXTENSIONS[i].toLowerCase()))){
 					continue;
 				}
@@ -85,9 +92,6 @@ public class Filter {
 			}
 			//exclude mediawiki entry
 			for(i=0; i<MEDIAWIKI.length; i++){
-//				if(s[1].length() >= MEDIAWIKI[i].length() && MEDIAWIKI[i].equals(s[1].substring(0, MEDIAWIKI[i].length()))){
-//					break;
-//				}
 				if(s[1].contains(MEDIAWIKI[i])){
 					break;
 				}
@@ -97,10 +101,25 @@ public class Filter {
 			}
 			
 			//legal entry survive at the end
-			bw.write(line + "\n");
+			al.add(new Entry(s[1], Integer.parseInt(s[2])));
+		}
+		Collections.sort(al, new Comparator<Entry>(){
+			public int compare(Entry e1, Entry e2){
+				if(e1.pageViews > e2.pageViews){
+					return -1;
+				}
+				else if (e1.pageViews < e2.pageViews){
+					return 1;
+				}
+				else{
+					return 0;
+				}	
+			}
+		});
+		for(Entry e : al){
+			bw.write(e.articleName + "\t" + e.pageViews + "\n");
 			bw.flush();
 		}
 		
-
 	}
 }
